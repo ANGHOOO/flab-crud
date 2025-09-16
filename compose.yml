@@ -1,0 +1,21 @@
+services:
+  my-db:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: products
+      POSTGRES_USER: postgres 
+      POSTGRES_PASSWORD: postgres 
+    ports:
+      - "5433:5432"
+    volumes:
+      - my-db:/var/lib/postgresql/data
+
+  my-app:
+    build: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      - my-db 
+
+volumes:
+  my-db:
