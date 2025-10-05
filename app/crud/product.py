@@ -4,7 +4,7 @@ from sqlalchemy import delete, func, select, update
 from sqlalchemy.orm import Session
 
 from app.models.product import Product
-from app.schemas.product import ProductCreate, ProductResponse, ProductUpdate
+from app.schemas.product import ProductCreate, ProductUpdate
 
 logger = logging.getLogger(__name__)
 
@@ -86,7 +86,7 @@ def delete_product_by_id(db: Session, id: int) -> bool:
         raise
 
 
-def get_all_product_count(db: Session): 
+def get_all_product_count(db: Session):
     try:
         stmt = select(func.count(Product.product_id))
         result = db.execute(stmt).scalar()
@@ -96,19 +96,3 @@ def get_all_product_count(db: Session):
     except Exception as e:
         logger.error(f"상품 개수 조회 실패: {str(e)}")
         raise
-
-
-if __name__ == "__main__":
-    from app.database import SessionLocal, engine
-
-    logging.basicConfig(level=logging.INFO)
-
-    with SessionLocal() as session:
-        product_data = ProductCreate(
-            name="검정 양말",
-            price=1000,
-            quantity=100,
-        )
-        # create_product(session, product_data)
-        # get_product_by_id(session, 1)
-        delete_product_by_id(session, 4)
