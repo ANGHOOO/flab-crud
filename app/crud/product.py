@@ -63,7 +63,7 @@ def update_product_by_id(db: Session, id: int, product_data: ProductUpdate) -> b
 
     except Exception as e:
         db.rollback()
-        logger.error(f"상품 {id}번 업데이트 실패")
+        logger.error(f"상품 {id}번 업데이트 실패: {e}")
         raise
 
 
