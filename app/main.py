@@ -33,13 +33,13 @@ def create_product(product_data: ProductCreate, db: Session = Depends(get_db)):
     return crud_product.create_product(db, product_data)
 
 
-@app.patch("/products", status_code=status.HTTP_200_OK)
+@app.patch("/products/{id}", status_code=status.HTTP_200_OK)
 def update_product(update: ProductUpdate, id: int, db: Session = Depends(get_db)):
     result = crud_product.update_product_by_id(db, id, update)
     return {"Update": result}
 
 
-@app.delete("/product/{id}", status_code=status.HTTP_200_OK)
+@app.delete("/products/{id}", status_code=status.HTTP_200_OK)
 def delete_product_by_id(id: int, db: Session = Depends(get_db)):
     result = crud_product.delete_product_by_id(db, id)
     return {"Delete": result}
