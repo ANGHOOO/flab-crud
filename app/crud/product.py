@@ -47,7 +47,7 @@ def update_product_by_id(db: Session, id: int, product_data: ProductUpdate) -> b
     try:
         update_data = product_data.model_dump(exclude_unset=True)
         if not update_data:
-            logger.warning(f"업데이트 할 데이터가 없습니다.")
+            logger.warning("업데이트 할 데이터가 없습니다.")
             return False
 
         stmt = update(Product).where(Product.product_id == id).values(**update_data)
