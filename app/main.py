@@ -20,7 +20,7 @@ def get_all_count_products(db: Session = Depends(get_db)):
 
 
 @app.get(
-    "/product/{id}", response_model=ProductResponse, status_code=status.HTTP_200_OK
+    "/products/{id}", response_model=ProductResponse, status_code=status.HTTP_200_OK
 )
 def get_product_by_id(id: int, db: Session = Depends(get_db)):
     return crud_product.get_product_by_id(db, id)
