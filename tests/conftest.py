@@ -1,6 +1,6 @@
-from sqlalchemy import create_engine
 from fastapi.testclient import TestClient
 from pytest import fixture
+from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from app.database import Base, get_db
@@ -10,9 +10,11 @@ DATABASE_URL = "sqlite:///test.db"
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
+
 @fixture(scope="function")
 def client() -> TestClient:
     return TestClient(app)
+
 
 @fixture(scope="function")
 def db():
@@ -23,6 +25,7 @@ def db():
     finally:
         db.close()
         Base.metadata.drop_all(bind=engine)
+
 
 @fixture(scope="function")
 def db_client(db):
@@ -37,4 +40,3 @@ def db_client(db):
     yield test_client
     app.dependency_overrides.clear()
     return test_client
-
