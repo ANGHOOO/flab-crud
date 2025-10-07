@@ -1,6 +1,6 @@
 from fastapi.testclient import TestClient
 
-from app.schemas.product import ProductCreate
+from app.schemas.product import ProductCreate, ProductUpdate
 
 
 def test_get_all_count_products(db_client: TestClient):
@@ -58,7 +58,7 @@ def test_get_product_by_id(db_client: TestClient):
     )
     db_client.post(
         "/products",
-            json=test_product.model_dump(),
+        json=test_product.model_dump(),
     )
     response = db_client.get("/products/1")
     response_data = response.json()
@@ -66,9 +66,42 @@ def test_get_product_by_id(db_client: TestClient):
     assert response_data["product_id"] == 1
 
 
-def test_update_product():
-    assert False
+def test_update_product(db_client: TestClient):
+    test_product = ProductCreate(
+        name="Test Product",
+        price=100,
+        quantity=10,
+    )
+    db_client.post(
+        "/products",
+        json=test_product.model_dump(),
+    )
+
+    update_product = ProductUpdate(
+        name="Test Product",
+        price=1000,
+        quantity=100,
+    )
+    db_client.patch("/products/1", json=update_product.model_dump())
+
+    response = db_client.get("/products/1")
+    assert response.status_code == 200
+    assert response.json()["price"] == 1000
+    assert response.json()["quantity"] == 100
 
 
-def test_delete_product_by_id():
-    assert False
+def test_delete_product_by_id(db_client: TestClient):
+    test_product = ProductCreate(
+        name="Test Product",
+        price=100,
+        quantity=10,
+    )
+    db_client.post("/products", json=test_product.model_dump())
+    response = db_client.get("/products")
+    assert response.json()["product count"] == 1
+
+    response = db_client.delete("/products/1")
+    assert response.status_code == 200
+
+    response = db_client.get("/products")
+    assert response.json()["product count"] == 0
