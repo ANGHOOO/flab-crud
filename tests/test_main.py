@@ -50,8 +50,20 @@ def test_create_product(db_client: TestClient):
     assert "product_id" in response_data
 
 
-def test_get_product_by_id():
-    assert False
+def test_get_product_by_id(db_client: TestClient):
+    test_product = ProductCreate(
+        name="Test Product",
+        price=100,
+        quantity=10,
+    )
+    db_client.post(
+        "/products",
+            json=test_product.model_dump(),
+    )
+    response = db_client.get("/products/1")
+    response_data = response.json()
+    assert response.status_code == 200
+    assert response_data["product_id"] == 1
 
 
 def test_update_product():
